@@ -3,7 +3,8 @@ from generate_dataset import generate_dataset
 from train import train
 import argparse
 
-def run_training(path,
+def run_training(lex_path,
+                 imgs_path,
                  string_len,
                  dataset_size,
                  do_generate_lexicon,
@@ -11,14 +12,17 @@ def run_training(path,
                  ):
     # create lexicon
     if do_generate_lexicon:
-        generate_lexicon(path, string_len)
+        generate_lexicon(lex_path, string_len)
 
     #create image dataset
     if do_generate_dataset:
-        generate_dataset(path, string_len, dataset_size)
+        generate_dataset(lex_path,
+                 imgs_path,
+                 string_len,
+                 dataset_size)
 
     # train model on dataset
-    train(path,
+    train(imgs_path,
           dataset_size,
           string_len,
           )
@@ -29,8 +33,12 @@ if __name__ == '__main__':
 
     cmdline_parser = argparse.ArgumentParser('readbyspelling')
 
-    cmdline_parser.add_argument('-p', '--path',
-                                default="data/translation_dataset/",
+    cmdline_parser.add_argument('-lp', '--lex_path',
+                                default="data/lexicons/translation_dataset/",
+                                help='Datasets path (write and read)',
+                                type=str)
+    cmdline_parser.add_argument('-ip', '--imgs_path',
+                                default="data/imgs/translation_dataset/",
                                 help='Datasets path (write and read)',
                                 type=str)
     cmdline_parser.add_argument('-sl', '--string_len',
@@ -51,7 +59,8 @@ if __name__ == '__main__':
                                 type=bool)
 
     args, unknowns = cmdline_parser.parse_known_args()
-    run_training(args.path,
+    run_training(args.lex_path,
+                 args.imgs_path,
                  args.string_len,
                  args.dataset_len,
                  args.gen_lex,

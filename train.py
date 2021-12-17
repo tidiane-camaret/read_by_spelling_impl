@@ -11,7 +11,7 @@ from torch.autograd import Variable  # deprecated
 from train_utils import string_img_Dataset
 from models import *
 from string import ascii_lowercase
-
+"""
 parser = argparse.ArgumentParser()
 parser.add_argument("--n_epochs", type=int, default=200, help="number of epochs of training")
 parser.add_argument("--batch_size", type=int, default=64, help="size of the batches")
@@ -25,7 +25,7 @@ parser.add_argument("--channels", type=int, default=1, help="number of image cha
 parser.add_argument("--sample_interval", type=int, default=50, help="number of image channels")
 opt = parser.parse_args()
 print(opt)
-
+"""
 
 def train(path,
          dataset_max_len=500000,
@@ -45,6 +45,10 @@ def train(path,
 
     EMBED_SIZE = embed_size
     NB_FILTERS = nb_filters
+
+    batch_size = 64
+    n_epochs = 100
+    sample_interval = 50
 
     cuda = True if torch.cuda.is_available() else False
 
@@ -85,8 +89,8 @@ def train(path,
     train_loader, test_loader = torch.utils.data.random_split(dataset,
                                                               [int(len_ds * 0.8), len_ds - int(len_ds * 0.8)])
 
-    train_loader = torch.utils.data.DataLoader(train_loader, batch_size=opt.batch_size, drop_last=True)
-    test_loader = torch.utils.data.DataLoader(test_loader, batch_size=opt.batch_size)
+    train_loader = torch.utils.data.DataLoader(train_loader, batch_size=batch_size, drop_last=True)
+    test_loader = torch.utils.data.DataLoader(test_loader, batch_size=batch_size)
 
 
     # ----------
@@ -96,7 +100,7 @@ def train(path,
     g_loss_list = []
     d_loss_list = []
 
-    for epoch in range(opt.n_epochs):
+    for epoch in range(n_epochs):
         for i, (imgs, targets) in enumerate(train_loader):
 
             # Adversarial ground truths
@@ -128,7 +132,7 @@ def train(path,
             optimizer_D.zero_grad()
 
             # Measure discriminator's ability to classify real from generated samples
-            _, real_imgs = get_rand_strings_from_lexicon(string_len=STRING_LEN, batch_size=opt.batch_size,
+            _, real_imgs = get_rand_strings_from_lexicon(string_len=STRING_LEN, batch_size=batch_size,
                                                          lexfilename=LEXICON_FILE_PATH)
             real_imgs = [string_to_tensor(x, STRING_LEN, voc_list=VOC_LIST)
                          for x in real_imgs]
@@ -143,7 +147,7 @@ def train(path,
 
             print(
                 "[Epoch %d/%d] [Batch %d/%d] [D loss: %f] [G loss: %f]"
-                % (epoch, opt.n_epochs, i, len(train_loader), d_loss.item(), g_loss.item())
+                % (epoch, n_epochs, i, len(train_loader), d_loss.item(), g_loss.item())
             )
             output = tensor_to_string(gen_imgs[0].detach().numpy(), voc_list=VOC_LIST)
             target = tensor_to_string(targets[0].detach().numpy(), voc_list=VOC_LIST)
@@ -163,7 +167,7 @@ def train(path,
             d_loss_list.append(d_loss.item())
 
             batches_done = epoch * len(train_loader) + i
-            if i % opt.sample_interval == 0:
+            if i % sample_interval == 0:
                 plt.plot(g_loss_list, label="Gen")
                 plt.plot(d_loss_list, label="Disc")
                 plt.savefig('epoch' + str(epoch) + '.png')

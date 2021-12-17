@@ -116,7 +116,8 @@ def img_to_croppings(img,
 
     return img_list
 
-def generate_dataset(path,
+def generate_dataset(lex_path,
+         imgs_path,
          string_len=30,
          dataset_size=100000,
          ):
@@ -124,10 +125,9 @@ def generate_dataset(path,
     STRING_LEN = string_len
     DATASET_SIZE = dataset_size
 
-    PATH = path
-    DATASET_DIR = PATH + "imgs/"
+    DATASET_DIR = imgs_path
     os.makedirs(DATASET_DIR, exist_ok=True)
-    lexfilename = PATH + "strings.pkl"#'/media/tidiane/D:/Dev/CV/unsupervised_ocr/data/translation_dataset/translation_ds_strings.pkl'
+    lexfilename = lex_path + "strings.pkl"#'/media/tidiane/D:/Dev/CV/unsupervised_ocr/data/translation_dataset/translation_ds_strings.pkl'
 
 
     with open(lexfilename, 'rb') as f:

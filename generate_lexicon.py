@@ -21,8 +21,7 @@ def normalizeString(s):
 
 def generate_lexicon(path,
          string_len=30):
-    PATH = path #"data/translation/"
-    #"/media/tidiane/D:/Dev/CV/unsupervised_ocr/data/translation_dataset/"
+    PATH = path
     STRING_LEN = string_len
 
 

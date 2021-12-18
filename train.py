@@ -198,9 +198,9 @@ def train(lex_path,
             """
 
         if save_model:
-            torch.save(generator.state_dict(), "models_data/"+str(epoch)+" gen.pt")
-            torch.save(generator.state_dict(), "models_data/"+str(epoch)+" disc.pt")
-            with open(str(epoch)+' results.pkl', 'wb') as f:
+            torch.save(generator.state_dict(), "models_data/"+str(epoch)+"_gen.pt")
+            torch.save(generator.state_dict(), "models_data/"+str(epoch)+"_disc.pt")
+            with open(str(epoch)+'_results.pkl', 'wb') as f:
                 pickle.dump(results, f)
 
 if __name__ == '__main__':

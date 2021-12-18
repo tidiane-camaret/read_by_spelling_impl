@@ -1,0 +1,8 @@
+info per batch : 
+[epoch,
+batch,
+g_loss,
+d_loss,
+target,
+output,
+score]

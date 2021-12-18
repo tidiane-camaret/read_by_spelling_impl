@@ -160,9 +160,9 @@ def train(lex_path,
                 "[Epoch %d/%d] [Batch %d/%d] [D loss: %f] [G loss: %f]"
                 % (epoch, n_epochs, i, len(train_loader), d_loss.item(), g_loss.item())
             )
-            output = tensor_to_string(gen_imgs[0].detach().numpy(), voc_list=VOC_LIST)
-            target = tensor_to_string(targets[0].detach().numpy(), voc_list=VOC_LIST)
-            exemple = tensor_to_string(real_imgs[0].detach().numpy(), voc_list=VOC_LIST)
+            output = tensor_to_string(gen_imgs[0].detach().cpu().numpy(), voc_list=VOC_LIST)
+            target = tensor_to_string(targets[0].detach().cpu().numpy(), voc_list=VOC_LIST)
+            exemple = tensor_to_string(real_imgs[0].detach().cpu().numpy(), voc_list=VOC_LIST)
             score = 0
             for i in range(len(target)):
                 if output[i] == target[i]:

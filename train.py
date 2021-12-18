@@ -53,7 +53,7 @@ def train(lex_path,
 
     cuda = True if torch.cuda.is_available() else False
 
-    print("cuda : ",cuda)
+    print("cuda : ", cuda)
 
     # !!! Minimizes MSE instead of BCE
     adversarial_loss = torch.nn.MSELoss()
@@ -104,9 +104,17 @@ def train(lex_path,
     for epoch in range(n_epochs):
         for i, (imgs, targets) in enumerate(train_loader):
 
+
+
             # Adversarial ground truths
             valid = Variable(Tensor(imgs.shape[0], 1).fill_(1.0), requires_grad=False)
             fake = Variable(Tensor(imgs.shape[0], 1).fill_(0.0), requires_grad=False)
+
+            if cuda:
+                valid = valid.cuda()
+                fake = fake.cuda()
+                imgs = imgs.cuda()
+                targets = targets.cuda()
 
             # Configure input
             real_imgs = Variable(imgs.type(Tensor))

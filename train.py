@@ -27,16 +27,17 @@ opt = parser.parse_args()
 print(opt)
 """
 
-def train(path,
+def train(lex_path,
+          imgs_path,
          dataset_max_len=500000,
          string_len=30,
          embed_size=256,
          nb_filters=512
          ):
 
-    PATH = path
-    LEXICON_FILE_PATH = PATH + "strings.pkl"
-    DATASET_PATH = PATH + "imgs/"
+
+    LEXICON_FILE_PATH = lex_path + "strings.pkl"
+    DATASET_PATH = imgs_path
     DATASET_MAX_LEN = dataset_max_len
     STRING_LEN = string_len
     VOC_LIST = list(ascii_lowercase + ' ')

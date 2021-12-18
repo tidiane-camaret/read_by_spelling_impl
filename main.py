@@ -22,7 +22,8 @@ def run_training(lex_path,
                  dataset_size)
 
     # train model on dataset
-    train(imgs_path,
+    train(lex_path,
+          imgs_path,
           dataset_size,
           string_len,
           )

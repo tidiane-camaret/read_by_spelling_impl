@@ -66,7 +66,7 @@ def string_to_image(string,
                     fixed_lenght=None,
                     draw_char_by_char=False):
 
-    font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/" + font_name, 25)
+    font = ImageFont.truetype("data/fonts/" + font_name, 25)
 
     img = Image.new("RGBA", (1, 1))
     text_size = ImageDraw.Draw(img).textsize(string,

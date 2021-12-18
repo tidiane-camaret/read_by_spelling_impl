@@ -116,8 +116,6 @@ def train(lex_path,
                 imgs = imgs.cuda()
                 targets = targets.cuda()
 
-            # Configure input
-            real_imgs = Variable(imgs.type(Tensor))
 
             # -----------------
             #  Train Generator
@@ -147,6 +145,10 @@ def train(lex_path,
                          for x in real_imgs]
 
             real_imgs = torch.stack(real_imgs)
+
+            if cuda:
+                real_imgs = real_imgs.cuda()
+
             real_loss = adversarial_loss(discriminator(real_imgs), valid)
             fake_loss = adversarial_loss(discriminator(gen_imgs.detach()), fake)
             d_loss = 0.5 * (real_loss + fake_loss)

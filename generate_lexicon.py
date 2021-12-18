@@ -37,7 +37,10 @@ def generate_lexicon(path,
 
     print(len(lexicon))
     with open(PATH + 'strings.pkl', 'wb') as f:
-        pickle.dump(lexicon, f)
+        pickle.dump(lexicon[:len(lexicon)//2], f)
+
+    with open(PATH + 'strings2.pkl', 'wb') as f:
+        pickle.dump(lexicon[len(lexicon)//2:], f)
 
 if __name__ == '__main__':
     cmdline_parser = argparse.ArgumentParser('readbyspelling')

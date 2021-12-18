@@ -38,7 +38,7 @@ def train(lex_path,
          ):
 
 
-    LEXICON_FILE_PATH = lex_path + "strings.pkl"
+    LEXICON_FILE_PATH = lex_path + "strings2.pkl"
     DATASET_PATH = imgs_path
     DATASET_MAX_LEN = dataset_max_len
     STRING_LEN = string_len
@@ -200,7 +200,7 @@ def train(lex_path,
         if save_model:
             torch.save(generator.state_dict(), "models_data/"+str(epoch)+"_gen.pt")
             torch.save(generator.state_dict(), "models_data/"+str(epoch)+"_disc.pt")
-            with open(str(epoch)+'_results.pkl', 'wb') as f:
+            with open("models_data/"+str(epoch)+'_results.pkl', 'wb') as f:
                 pickle.dump(results, f)
 
 if __name__ == '__main__':

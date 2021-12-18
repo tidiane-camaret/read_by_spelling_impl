@@ -1,9 +1,10 @@
 """
+Inspired by LSGan implementation :
 https://github.com/meliketoy/LSGAN.pytorch/blob/master/main.py
 """
 
 import argparse
-import matplotlib.pyplot as plt
+import pickle
 import torch
 from torch.utils.data import DataLoader
 from torch.autograd import Variable  # deprecated
@@ -32,7 +33,8 @@ def train(lex_path,
          dataset_max_len=500000,
          string_len=30,
          embed_size=256,
-         nb_filters=512
+         nb_filters=512,
+         save_model=True
          ):
 
 
@@ -101,7 +103,13 @@ def train(lex_path,
     g_loss_list = []
     d_loss_list = []
 
+    results = []
+
+
     for epoch in range(n_epochs):
+
+
+
         for i, (imgs, targets) in enumerate(train_loader):
 
 
@@ -171,17 +179,29 @@ def train(lex_path,
             print("target  : ", target)
             print("output  : ", output, ", char acc = ", score)
 
-
-
-
-            g_loss_list.append(g_loss.item())
-            d_loss_list.append(d_loss.item())
+            results.append([epoch,
+                            i,
+                            g_loss.item(),
+                            d_loss.item(),
+                            target,
+                            output,
+                            score])
 
             batches_done = epoch * len(train_loader) + i
+            """
+            g_loss_list.append(g_loss.item())
+            d_loss_list.append(d_loss.item())
             if i % sample_interval == 0:
-                plt.plot(g_loss_list, label="Gen")
-                plt.plot(d_loss_list, label="Disc")
-                plt.savefig('epoch' + str(epoch) + '.png')
+            plt.plot(g_loss_list, label="Gen")
+            plt.plot(d_loss_list, label="Disc")
+            plt.savefig('epoch' + str(epoch) + '.png')
+            """
+
+        if save_model:
+            torch.save(generator.state_dict(), "models_data/"+epoch+" gen.pt")
+            torch.save(generator.state_dict(), "models_data/"+epoch+" disc.pt")
+            with open(epoch+' results.pkl', 'wb') as f:
+                pickle.dump(results, f)
 
 if __name__ == '__main__':
     cmdline_parser = argparse.ArgumentParser('readbyspelling')

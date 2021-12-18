@@ -34,7 +34,7 @@ def generate_lexicon(path,
     lexicon = [" ".join(line.split()) for line in lexicon]
     lexicon = [x[0:STRING_LEN].lower() for x in lexicon if len(x) >= STRING_LEN]
 
-    print(len(lexicon))
+    print("total lexicon length : ",len(lexicon))
 
     random.shuffle(lexicon)
     with open(PATH + 'strings.pkl', 'wb') as f:

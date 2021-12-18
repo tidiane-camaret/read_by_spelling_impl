@@ -136,7 +136,7 @@ def generate_dataset(lex_path,
     print(len(lexicon))
 
 
-    font_names = ["FreeSerifItalic.ttf"]#, "FreeMonoBoldOblique.ttf", "FreeSansBoldOblique.ttf", "FreeSerifBoldItalic.ttf"]#,
+    font_names = ["FreeSerifItalic.ttf", "FreeMonoBoldOblique.ttf", "FreeSansBoldOblique.ttf"]# "FreeSerifBoldItalic.ttf"]#,
                   #"FreeMonoBold.ttf", "FreeSansBold.ttf", "FreeSerifBold.ttf", "FreeMonoOblique.ttf", "FreeSansOblique.ttf",
                   #"FreeSerifItalic.ttf", "FreeMono.ttf", "FreeSans.ttf", "FreeSerif.ttf"]
 

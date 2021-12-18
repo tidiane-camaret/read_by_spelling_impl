@@ -1,8 +1,7 @@
 import re
 import unicodedata
 import pickle
-import numpy as np
-import matplotlib.pyplot as plt
+import random
 import argparse
 
 
@@ -36,6 +35,8 @@ def generate_lexicon(path,
     lexicon = [x[0:STRING_LEN].lower() for x in lexicon if len(x) >= STRING_LEN]
 
     print(len(lexicon))
+
+    random.shuffle(lexicon)
     with open(PATH + 'strings.pkl', 'wb') as f:
         pickle.dump(lexicon[:len(lexicon)//2], f)
 

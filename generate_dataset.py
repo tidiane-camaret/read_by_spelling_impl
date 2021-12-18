@@ -1,7 +1,6 @@
 import os
 import argparse
 
-
 import pickle
 import string
 import numpy as np

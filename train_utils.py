@@ -4,7 +4,9 @@ from PIL import Image
 from torchvision import transforms
 import pickle
 import random
-from string import ascii_letters, ascii_lowercase
+import torch
+from string import ascii_letters
+import numpy as np
 
 class string_img_Dataset(Dataset):
 
@@ -73,11 +75,6 @@ def get_rand_strings(string_len, batch_size: int = 64):
 
 
     return data
-
-
-import torch
-from string import ascii_letters
-import numpy as np
 
 
 def string_to_tensor(string, tensor_length, sos=False, voc_list=ascii_letters + ' ', nb_spe_char=3):

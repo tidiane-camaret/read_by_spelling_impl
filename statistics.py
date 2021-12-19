@@ -1,7 +1,7 @@
 import pickle
 import matplotlib.pyplot as plt
 
-with open("models_data/25_results.pkl", 'rb') as f:
+with open("models_data/99_results.pkl", 'rb') as f:
     stats = pickle.load(f)
 
 stats = stats[::942]

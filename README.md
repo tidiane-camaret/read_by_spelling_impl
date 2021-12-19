@@ -1,7 +1,7 @@
 # Unsupervised text recognition
 This is an implementation of the paper **Learning to Read by Spelling**  by Gupta, Vedaldi, Zisserman (2018).
 This paper develops an **unsupervised learning** method for **text recognition**, 
-based on convolutional neural networks and adversarial training against 
+based on convolutional neural networks and adversarial training against real sample of text data.
 
 # Generate datasets only : 
 

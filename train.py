@@ -32,13 +32,16 @@ def train(lex_path,
           imgs_path,
          dataset_max_len=500000,
          string_len=30,
+         batch_size=64,
+         n_epochs = 100,
          embed_size=256,
          nb_filters=512,
-         save_model=True
+         save_model=True,
+         verbose=True,
          ):
 
 
-    LEXICON_FILE_PATH = lex_path + "strings2.pkl"
+    LEXICON_FILE_PATH = lex_path + "exemples_strings.pkl"
     DATASET_PATH = imgs_path
     DATASET_MAX_LEN = dataset_max_len
     STRING_LEN = string_len
@@ -48,10 +51,6 @@ def train(lex_path,
 
     EMBED_SIZE = embed_size
     NB_FILTERS = nb_filters
-
-    batch_size = 64
-    n_epochs = 100
-    sample_interval = 50
 
     cuda = True if torch.cuda.is_available() else False
 
@@ -73,7 +72,6 @@ def train(lex_path,
     generator.apply(weights_init_normal)
     discriminator.apply(weights_init_normal)
 
-
     # Optimizers
     #optimizer_G = torch.optim.Adam(generator.parameters(), lr=opt.lr, betas=(opt.b1, opt.b2))
     #optimizer_D = torch.optim.Adam(discriminator.parameters(), lr=opt.lr, betas=(opt.b1, opt.b2))
@@ -88,31 +86,17 @@ def train(lex_path,
                                  voc_list=ascii_lowercase + ' ',
                                  dataset_dir=DATASET_PATH)
 
-    len_ds = len(dataset)
-    train_loader, test_loader = torch.utils.data.random_split(dataset,
-                                                              [int(len_ds * 0.8), len_ds - int(len_ds * 0.8)])
-
-    train_loader = torch.utils.data.DataLoader(train_loader, batch_size=batch_size, drop_last=True)
-    test_loader = torch.utils.data.DataLoader(test_loader, batch_size=batch_size)
-
+    train_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, drop_last=True)
 
     # ----------
     #  Training
     # ----------
 
-    g_loss_list = []
-    d_loss_list = []
-
     results = []
-
 
     for epoch in range(n_epochs):
 
-
-
         for i, (imgs, targets) in enumerate(train_loader):
-
-
 
             # Adversarial ground truths
             valid = Variable(Tensor(imgs.shape[0], 1).fill_(1.0), requires_grad=False)
@@ -164,43 +148,37 @@ def train(lex_path,
             d_loss.backward()
             optimizer_D.step()
 
-            print(
-                "[Epoch %d/%d] [Batch %d/%d] [D loss: %f] [G loss: %f]"
-                % (epoch, n_epochs, i, len(train_loader), d_loss.item(), g_loss.item())
-            )
-            output = tensor_to_string(gen_imgs[0].detach().cpu().numpy(), voc_list=VOC_LIST)
-            target = tensor_to_string(targets[0].detach().cpu().numpy(), voc_list=VOC_LIST)
-            exemple = tensor_to_string(real_imgs[0].detach().cpu().numpy(), voc_list=VOC_LIST)
-            score = 0
-            for i in range(len(target)):
-                if output[i] == target[i]:
-                    score += 1
-            print("exemple : ", exemple)
-            print("target  : ", target)
-            print("output  : ", output, ", char acc = ", score)
 
-            results.append([epoch,
-                            i,
-                            g_loss.item(),
-                            d_loss.item(),
-                            target,
-                            output,
-                            score])
+            if verbose:
 
-            batches_done = epoch * len(train_loader) + i
-            """
-            g_loss_list.append(g_loss.item())
-            d_loss_list.append(d_loss.item())
-            if i % sample_interval == 0:
-            plt.plot(g_loss_list, label="Gen")
-            plt.plot(d_loss_list, label="Disc")
-            plt.savefig('epoch' + str(epoch) + '.png')
-            """
+
+                output = tensor_to_string(gen_imgs[0].detach().cpu().numpy(), voc_list=VOC_LIST)
+                target = tensor_to_string(targets[0].detach().cpu().numpy(), voc_list=VOC_LIST)
+                exemple = tensor_to_string(real_imgs[0].detach().cpu().numpy(), voc_list=VOC_LIST)
+                score = 0
+                for l in range(len(target)):
+                    if output[l] == target[l]:
+                        score += 1
+
+                results.append([epoch,
+                                i,
+                                g_loss.item(),
+                                d_loss.item(),
+                                target,
+                                output,
+                                score])
+
+                print("[Epoch %d/%d] [Batch %d/%d] [G loss: %f] [D loss: %f]"
+                    % (epoch, n_epochs, i, len(train_loader), g_loss.item(), d_loss.item()))
+
+                print("exemple : ", exemple)
+                print("target  : ", target)
+                print("output  : ", output, ", char acc = ", score)
 
         if save_model:
             torch.save(generator.state_dict(), "models_data/"+str(epoch)+"_gen.pt")
             torch.save(generator.state_dict(), "models_data/"+str(epoch)+"_disc.pt")
-            with open("models_data/"+str(epoch)+'_results.pkl', 'wb') as f:
+            with open("models_data/run_results.pkl", 'wb') as f:
                 pickle.dump(results, f)
 
 if __name__ == '__main__':

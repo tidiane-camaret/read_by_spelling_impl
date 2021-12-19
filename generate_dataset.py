@@ -126,11 +126,13 @@ def generate_dataset(lex_path,
 
     DATASET_DIR = imgs_path
     os.makedirs(DATASET_DIR, exist_ok=True)
-    lexfilename = lex_path + "strings.pkl"#'/media/tidiane/D:/Dev/CV/unsupervised_ocr/data/translation_dataset/translation_ds_strings.pkl'
+    lexfilename = lex_path + "imgs_strings.pkl"#'/media/tidiane/D:/Dev/CV/unsupervised_ocr/data/translation_dataset/translation_ds_strings.pkl'
 
 
     with open(lexfilename, 'rb') as f:
         lexicon = pickle.load(f)
+
+    print(len(lexicon))
     lexicon = [x[0:STRING_LEN] for x in lexicon if len(x) >= STRING_LEN]
     print(lexicon[0:10])
     print(len(lexicon))

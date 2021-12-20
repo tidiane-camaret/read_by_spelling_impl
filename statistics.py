@@ -11,7 +11,7 @@ d = [row[3] for row in stats]
 s = [row[6]/30 for row in stats]
 o = [row[5] for row in stats]
 
-print([s[5] for s in stats if s[6]>=max_score-2])
+print([s[5] for s in stats if s[6] >= max_score-5])
 
 plt.plot(g, label="Gen")
 plt.plot(d, label="Disc")

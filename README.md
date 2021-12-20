@@ -3,6 +3,9 @@ This is an implementation of the paper **Learning to Read by Spelling**  by Gupt
 This paper develops an **unsupervised learning** method for **text recognition**, 
 based on convolutional neural networks and adversarial training against real sample of text data.
 
+![img1](data/examples.jpeg)
+The model aims to produce a textual transcription (**output**) of a given image (**target**).
+It only has been given unrelated textual **examples**.
 # Generate datasets only : 
 
 - Generate lexicons from raw text (one for image dataset generation,

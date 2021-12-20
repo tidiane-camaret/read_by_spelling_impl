@@ -12,21 +12,6 @@ from torch.autograd import Variable  # deprecated
 from train_utils import string_img_Dataset
 from models import *
 from string import ascii_lowercase
-"""
-parser = argparse.ArgumentParser()
-parser.add_argument("--n_epochs", type=int, default=200, help="number of epochs of training")
-parser.add_argument("--batch_size", type=int, default=64, help="size of the batches")
-parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
-parser.add_argument("--b1", type=float, default=0.5, help="adam: decay of first order momentum of gradient")
-parser.add_argument("--b2", type=float, default=0.999, help="adam: decay of first order momentum of gradient")
-parser.add_argument("--n_cpu", type=int, default=8, help="number of cpu threads to use during batch generation")
-parser.add_argument("--latent_dim", type=int, default=100, help="dimensionality of the latent space")
-parser.add_argument("--img_size", type=int, default=32, help="size of each image dimension")
-parser.add_argument("--channels", type=int, default=1, help="number of image channels")
-parser.add_argument("--sample_interval", type=int, default=50, help="number of image channels")
-opt = parser.parse_args()
-print(opt)
-"""
 
 def train(lex_path,
           imgs_path,
@@ -51,6 +36,8 @@ def train(lex_path,
 
     EMBED_SIZE = embed_size
     NB_FILTERS = nb_filters
+
+    print_every = 100
 
     cuda = True if torch.cuda.is_available() else False
 
@@ -149,7 +136,7 @@ def train(lex_path,
             optimizer_D.step()
 
 
-            if verbose:
+            if verbose :
 
 
                 output = tensor_to_string(gen_imgs[0].detach().cpu().numpy(), voc_list=VOC_LIST)
@@ -168,12 +155,13 @@ def train(lex_path,
                                 output,
                                 score])
 
-                print("[Epoch %d/%d] [Batch %d/%d] [G loss: %f] [D loss: %f]"
-                    % (epoch, n_epochs, i, len(train_loader), g_loss.item(), d_loss.item()))
+                if i % print_every == 0:
+                    print("[Epoch %d/%d] [Batch %d/%d] [G loss: %f] [D loss: %f]"
+                        % (epoch, n_epochs, i, len(train_loader), g_loss.item(), d_loss.item()))
 
-                print("exemple : ", exemple)
-                print("target  : ", target)
-                print("output  : ", output, ", char acc = ", score)
+                    print("exemple : ", exemple)
+                    print("target  : ", target)
+                    print("output  : ", output, ", char acc = ", score)
 
         if save_model:
             torch.save(generator.state_dict(), "models_data/"+str(epoch)+"_gen.pt")

@@ -20,8 +20,8 @@ def normalizeString(s):
 
 def generate_lexicon(path,
          string_len=30,
-         max_lexicon_len=300000,
-         imgs_dataset_perc=0.3,
+         max_lexicon_len=500000,
+         imgs_dataset_perc=0.2,
          stride = 10):
 
     PATH = path
@@ -37,7 +37,7 @@ def generate_lexicon(path,
     # Delete multiple spaces
     lexicon = [" ".join(line.split()) for line in lexicon]
 
-    lexicon = [x for x in lexicon if len(x) >= STRING_LEN]
+    lexicon = [x for x in lexicon if len(x) >= STRING_LEN/2]
 
     # fuse into string
     lexicon = ' '.join(lexicon)
@@ -56,6 +56,9 @@ def generate_lexicon(path,
         nb_sentences += 1
 
     print("total number of strings : ", len(sentences))
+
+    random.shuffle(sentences)
+
 
     imgs_lexicon = sentences[:int(len(sentences) * imgs_dataset_perc)]
     exemples_lexicon = sentences[int(len(sentences)*imgs_dataset_perc):len(sentences)]

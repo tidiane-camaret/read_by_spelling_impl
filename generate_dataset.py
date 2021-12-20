@@ -54,6 +54,7 @@ class create_string_to_image_dataset:
         if write:
             with open(write+'img_labels.pkl', 'wb') as f:
                 pickle.dump(self.labels, f)
+        print("images generated : ",word_count)
 
 
 def string_to_image(string,
@@ -132,10 +133,10 @@ def generate_dataset(lex_path,
     with open(lexfilename, 'rb') as f:
         lexicon = pickle.load(f)
 
-    print(len(lexicon))
+    print("lexicon size for image generation : ",len(lexicon))
     lexicon = [x[0:STRING_LEN] for x in lexicon if len(x) >= STRING_LEN]
     print(lexicon[0:10])
-    print(len(lexicon))
+
 
 
     font_names = ["FreeSerifItalic.ttf", "FreeMonoBoldOblique.ttf", "FreeSansBoldOblique.ttf"]# "FreeSerifBoldItalic.ttf"]#,

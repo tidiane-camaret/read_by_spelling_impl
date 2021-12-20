@@ -20,8 +20,8 @@ def normalizeString(s):
 
 def generate_lexicon(path,
          string_len=30,
-         max_lexicon_len=500000,
-         imgs_dataset_perc=0.2,
+         max_lexicon_len=200000,
+         imgs_dataset_perc=0.5,
          stride = 10):
 
     PATH = path
@@ -37,31 +37,40 @@ def generate_lexicon(path,
     # Delete multiple spaces
     lexicon = [" ".join(line.split()) for line in lexicon]
 
-    lexicon = [x for x in lexicon if len(x) >= STRING_LEN/2]
+    lexicon = [x for x in lexicon if len(x) >= 5]
 
+    for i in range(len(lexicon)):
+        if len(lexicon[i]) < STRING_LEN:
+            lexicon[i] = lexicon[i] + (STRING_LEN - len(lexicon[i])) * " "
+
+    lexicon = [x[0:STRING_LEN] for x in lexicon]
+
+    lexicon = lexicon[0:max_lexicon_len]
+
+    """
     # fuse into string
-    lexicon = ' '.join(lexicon)
+    fused_lexicon = ' '.join(lexicon)
 
-    if max_lexicon_len > len(lexicon) // STRING_LEN:
+    if max_lexicon_len > len(fused_lexicon) // STRING_LEN:
         print("raw text can only produce non overlapping dataset of size", len(lexicon) // STRING_LEN)
 
-    sentences = []
+    lexicon = []
     nb_sentences = 0
     start = 0
     end = STRING_LEN
-    while start < len(lexicon) and nb_sentences < max_lexicon_len:
+    while start < len(fused_lexicon) and nb_sentences < max_lexicon_len:
         start = start + stride #lexicon[end:end+30].find(' ')
         end = start + STRING_LEN
-        sentences.append(lexicon[start:end])
+        lexicon.append(fused_lexicon[start:end])
         nb_sentences += 1
 
-    print("total number of strings : ", len(sentences))
+    print("total number of strings : ", len(lexicon))
+    """
 
-    random.shuffle(sentences)
+    random.shuffle(lexicon)
 
-
-    imgs_lexicon = sentences[:int(len(sentences) * imgs_dataset_perc)]
-    exemples_lexicon = sentences[int(len(sentences)*imgs_dataset_perc):len(sentences)]
+    imgs_lexicon = lexicon[:int(len(lexicon) * imgs_dataset_perc)]
+    exemples_lexicon = lexicon[int(len(lexicon)*imgs_dataset_perc):len(lexicon)]
 
     print("number of strings for image generation: ", len(imgs_lexicon))
     print("number of strings for adversarial exemples: ", len(exemples_lexicon))

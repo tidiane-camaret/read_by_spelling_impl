@@ -1,7 +1,7 @@
 import pickle
 import matplotlib.pyplot as plt
 
-with open("models_data/run_results20_12_2.pkl", 'rb') as f:
+with open("models_data/run_results21_12.pkl", 'rb') as f:
     stats = pickle.load(f)
 max_score = max([row[6] for row in stats])
 print(max_score)

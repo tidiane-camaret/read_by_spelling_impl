@@ -37,37 +37,37 @@ def generate_lexicon(path,
     # Delete multiple spaces
     lexicon = [" ".join(line.split()) for line in lexicon]
 
-    lexicon = [x for x in lexicon if len(x) >= STRING_LEN]
+    lexicon_less = [x for x in lexicon if STRING_LEN // 2 <= len(x) <= STRING_LEN]
+    lexicon_more = [x for x in lexicon if STRING_LEN < len(x)]
 
-    for i in range(len(lexicon)):
-        if len(lexicon[i]) < STRING_LEN:
-            lexicon[i] = lexicon[i] + (STRING_LEN - len(lexicon[i])) * " "
+    for i in range(len(lexicon_less)):
+        if len(lexicon_less[i]) < STRING_LEN:
+            lexicon_less[i] = lexicon_less[i] + (STRING_LEN - len(lexicon_less[i])) * " "
 
-    lexicon = [x[0:STRING_LEN] for x in lexicon]
+     #fuse into string
+    fused_lexicon = ' '.join(lexicon_more)
 
-    lexicon = lexicon[0:max_lexicon_len]
-
-    """
-    # fuse into string
-    fused_lexicon = ' '.join(lexicon)
-
-    if max_lexicon_len > len(fused_lexicon) // STRING_LEN:
-        print("raw text can only produce non overlapping dataset of size", len(lexicon) // STRING_LEN)
+    #if max_lexicon_len > len(fused_lexicon) // STRING_LEN:
+    #    print("raw text can only produce non overlapping dataset of size", len(lexicon) // STRING_LEN)
 
     lexicon = []
     nb_sentences = 0
     start = 0
     end = STRING_LEN
     while start < len(fused_lexicon) and nb_sentences < max_lexicon_len:
-        start = start + stride #lexicon[end:end+30].find(' ')
+        start = start + fused_lexicon[start:end].rfind(' ') + 1
         end = start + STRING_LEN
         lexicon.append(fused_lexicon[start:end])
         nb_sentences += 1
 
+    print(lexicon[0:100])
+    lexicon = lexicon + lexicon_less
+
     print("total number of strings : ", len(lexicon))
-    """
 
     random.shuffle(lexicon)
+
+
 
     imgs_lexicon = lexicon[:int(len(lexicon) * imgs_dataset_perc)]
     exemples_lexicon = lexicon[int(len(lexicon)*imgs_dataset_perc):len(lexicon)]

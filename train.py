@@ -37,7 +37,7 @@ def train(lex_path,
     EMBED_SIZE = embed_size
     NB_FILTERS = nb_filters
 
-    print_every = 100
+    print_every = 20
 
     cuda = True if torch.cuda.is_available() else False
 

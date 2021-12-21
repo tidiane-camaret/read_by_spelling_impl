@@ -46,6 +46,9 @@ class create_string_to_image_dataset:
                 self.labels.append(label)
                 self.imgs.append(img)
 
+                if word_count % 500 == 0:
+                    print(word_count)
+
                 if word_count > nb_ex:
                     break
             if word_count > nb_ex:
@@ -133,8 +136,8 @@ def generate_dataset(lex_path,
     with open(lexfilename, 'rb') as f:
         lexicon = pickle.load(f)
 
-    print("lexicon size for image generation : ",len(lexicon))
     lexicon = [x[0:STRING_LEN] for x in lexicon if len(x) >= STRING_LEN]
+    print("lexicon size for image generation : ", len(lexicon))
     print(lexicon[0:10])
 
 

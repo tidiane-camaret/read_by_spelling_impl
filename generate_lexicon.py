@@ -37,7 +37,7 @@ def generate_lexicon(path,
     # Delete multiple spaces
     lexicon = [" ".join(line.split()) for line in lexicon]
 
-    lexicon = [x for x in lexicon if len(x) >= 5]
+    lexicon = [x for x in lexicon if len(x) >= STRING_LEN]
 
     for i in range(len(lexicon)):
         if len(lexicon[i]) < STRING_LEN:

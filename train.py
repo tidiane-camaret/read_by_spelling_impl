@@ -5,7 +5,7 @@ https://github.com/meliketoy/LSGAN.pytorch/blob/master/main.py
 
 import argparse
 import pickle
-import torch
+import numpy as np
 from torch.utils.data import DataLoader
 from torch.autograd import Variable  # deprecated
 
@@ -81,6 +81,9 @@ def train(lex_path,
 
     results = []
 
+    with open(LEXICON_FILE_PATH, 'rb') as f:
+        lexicon = pickle.load(f)
+
     for epoch in range(n_epochs):
 
         for i, (imgs, targets) in enumerate(train_loader):
@@ -118,11 +121,8 @@ def train(lex_path,
             optimizer_D.zero_grad()
 
             # Measure discriminator's ability to classify real from generated samples
-            _, real_imgs = get_rand_strings_from_lexicon(string_len=STRING_LEN, batch_size=batch_size,
-                                                         lexfilename=LEXICON_FILE_PATH)
-            real_imgs = [string_to_tensor(x, STRING_LEN, voc_list=VOC_LIST)
-                         for x in real_imgs]
-
+            sampled_indexes = np.random.randint(0, len(lexicon), batch_size)
+            real_imgs = [string_to_tensor(lexicon[x], STRING_LEN, voc_list=VOC_LIST) for x in sampled_indexes]
             real_imgs = torch.stack(real_imgs)
 
             if cuda:

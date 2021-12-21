@@ -61,7 +61,7 @@ def generate_lexicon(path,
 
     fused_lexicon = ' '.join(lex)
 
-    print(len(fused_lexicon))
+    print(len(lexicon_less))
 
     #if max_lexicon_len > len(fused_lexicon) // STRING_LEN:
     #    print("raw text can only produce non overlapping dataset of size", len(lexicon) // STRING_LEN)

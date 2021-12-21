@@ -143,9 +143,10 @@ def train(lex_path,
                 target = tensor_to_string(targets[0].detach().cpu().numpy(), voc_list=VOC_LIST)
                 exemple = tensor_to_string(real_imgs[0].detach().cpu().numpy(), voc_list=VOC_LIST)
                 score = 0
-                for l in range(len(target)):
+                for l in range(len(target.rstrip())):
                     if output[l] == target[l]:
                         score += 1
+                score = score/len(target.rstrip())
 
                 results.append([epoch,
                                 i,

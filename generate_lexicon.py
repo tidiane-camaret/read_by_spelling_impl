@@ -20,8 +20,8 @@ def normalizeString(s):
 
 def generate_lexicon(path,
          string_len=30,
-         max_lexicon_len=200000,
-         imgs_dataset_perc=0.45,
+         max_lexicon_len=1000000,
+         imgs_dataset_perc=0.2,
          stride = 10):
 
     PATH = path
@@ -37,7 +37,7 @@ def generate_lexicon(path,
     # Delete multiple spaces
     lexicon = [" ".join(line.split()) for line in lexicon]
 
-    lexicon_less = [x for x in lexicon if STRING_LEN // 2 <= len(x) <= STRING_LEN]
+    lexicon_less = [x for x in lexicon if STRING_LEN - 5 <= len(x) <= STRING_LEN]
     lexicon_more = [x for x in lexicon if STRING_LEN < len(x)]
 
     for i in range(len(lexicon_less)):
@@ -47,6 +47,22 @@ def generate_lexicon(path,
      #fuse into string
     fused_lexicon = ' '.join(lexicon_more)
 
+    lex = fused_lexicon.split(" ")
+    print(max([len(l) for l in lex]))
+    counter = collections.Counter(lex)
+
+    print("vocabulary len : ", len(counter))
+
+    lex = [l for l in lex if counter[l] > 10]
+
+    print("new vocabulary len : ", len(collections.Counter(lex)))
+
+
+
+    fused_lexicon = ' '.join(lex)
+
+    print(len(fused_lexicon))
+
     #if max_lexicon_len > len(fused_lexicon) // STRING_LEN:
     #    print("raw text can only produce non overlapping dataset of size", len(lexicon) // STRING_LEN)
 
@@ -54,17 +70,25 @@ def generate_lexicon(path,
     nb_sentences = 0
     start = 0
     end = STRING_LEN
-    while end < len(fused_lexicon) and nb_sentences < max_lexicon_len:
-        start = start + fused_lexicon[start:end].rfind(' ') + 1
-        end = start + STRING_LEN
+    while end < len(fused_lexicon) - STRING_LEN and nb_sentences < max_lexicon_len:
+        start = start + fused_lexicon[start:end].find(' ') + 1
+        end = start + min(fused_lexicon[start:start + STRING_LEN].rfind(' '), STRING_LEN)
         lexicon.append(fused_lexicon[start:end])
         nb_sentences += 1
 
+
+    for i in range(len(lexicon)):
+        if len(lexicon[i]) < STRING_LEN:
+            lexicon[i] = lexicon[i] + (STRING_LEN - len(lexicon[i])) * " "
+
     lexicon = lexicon + lexicon_less
 
-    print("total number of strings : ", len(lexicon))
+    print("total number of strings : ", len(lexicon),
+          "total number of unique strings", len(set(lexicon)))
 
     random.shuffle(lexicon)
+
+    print(lexicon[:100])
 
     imgs_lexicon = lexicon[:int(len(lexicon) * imgs_dataset_perc)]
     exemples_lexicon = lexicon[int(len(lexicon)*imgs_dataset_perc):len(lexicon)]
@@ -78,6 +102,7 @@ def generate_lexicon(path,
 
     with open(PATH + 'exemples_strings.pkl', 'wb') as f:
         pickle.dump(exemples_lexicon, f)
+
 
 if __name__ == '__main__':
     cmdline_parser = argparse.ArgumentParser('readbyspelling')

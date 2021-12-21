@@ -21,7 +21,7 @@ def normalizeString(s):
 def generate_lexicon(path,
          string_len=30,
          max_lexicon_len=200000,
-         imgs_dataset_perc=0.4,
+         imgs_dataset_perc=0.45,
          stride = 10):
 
     PATH = path

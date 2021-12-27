@@ -1,6 +1,6 @@
 from generate_lexicon import generate_lexicon
 from generate_dataset import generate_dataset
-from train import train
+from train_lit import train
 import argparse
 
 def run_training(lex_path,

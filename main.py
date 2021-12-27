@@ -27,7 +27,6 @@ def run_training(lex_path,
           imgs_path,
           dataset_size,
           string_len,
-          verbose=verbose
           )
 
 # Press the green button in the gutter to run the script.

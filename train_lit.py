@@ -117,7 +117,7 @@ def train(lex_path,
          images_path,
          dataset_max_len=500000,
          string_len=30,
-         batch_size=64,
+         batch_size=8,
          n_epochs=100,
          embed_size=256,
          nb_filters=512,
@@ -128,7 +128,7 @@ def train(lex_path,
 
     lex_path = lex_path + "exemples_strings.pkl"
 
-    with open(lex_path , 'rb') as f:
+    with open(lex_path, 'rb') as f:
         lexicon = pickle.load(f)
 
     transformer = LitTransformerGan(string_len=string_len,
@@ -140,7 +140,7 @@ def train(lex_path,
     trainer = pl.Trainer(max_epochs=n_epochs,
                          gpus=num_gpus
                          )
-    dataset = string_img_Dataset(img_size=(16, string_len * 2 ** 3),
+    dataset = string_img_Dataset(img_size=(32, string_len*2**4),
                                              batch_size=batch_size,
                                              max_len=dataset_max_len,
                                              string_tensor_length=string_len,

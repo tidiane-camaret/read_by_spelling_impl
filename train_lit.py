@@ -19,7 +19,7 @@ NB_SPE_CHAR = 3
 
 
 class LitTransformerGan(pl.LightningModule):
-    def __init__(self, freeze, string_len, voc_len, embed_size, nb_filters, lexicon):
+    def __init__(self, string_len, voc_len, embed_size, nb_filters, lexicon):
         super().__init__()
 
         self.generator = Generator(string_len, voc_len=voc_len + NB_SPE_CHAR)
